@@ -33,6 +33,7 @@ Or
 #### ActiveRecord + carrierwave
 Add this lines to your application's Gemfile:
 
+    gem 'activeadmin', '~> 1.3.0'
     gem 'carrierwave', '1.2.0'
     gem 'mini_magick', '~> 4.8'
 

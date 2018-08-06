@@ -18,6 +18,12 @@ class Redactor2Rails::ImagesController < ApplicationController
         @errors << @image.errors
       end
     end
+
+    if @results.length == 1
+      render json: { filelink: @results[0].url(:content) }
+    else
+      render json: { data: @results, error: @errors.join(',') }
+    end
   end
 
   private

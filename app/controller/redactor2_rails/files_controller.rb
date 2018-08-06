@@ -19,7 +19,11 @@ class Redactor2Rails::FilesController < ApplicationController
       end
     end
 
-    render json: {data: @results, errors: @errors}
+    if @results.length == 1
+      render json: { filelink: @results[0].url, filename: @results[0].filename }
+    else
+      render json: { data: @results, error: @errors.join(',') }
+    end
   end
 
   private

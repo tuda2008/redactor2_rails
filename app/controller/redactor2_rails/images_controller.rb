@@ -12,10 +12,9 @@ class Redactor2Rails::ImagesController < ApplicationController
 
   def create
     return if params[:file].nil?
-    @results = []
+    @results = {}
     @errors = []
-    
-    params[:file].each do |file|
+    params[:file].each_with_index do |file, i|
       @image = Redactor2Rails.image_model.new
       @image.data = file
       if @image.has_attribute?(:"#{Redactor2Rails.devise_user_key}")
@@ -24,20 +23,16 @@ class Redactor2Rails::ImagesController < ApplicationController
         @image.assetable = user
       end
       if @image.save
-        @results << { id: @image.id, url: @image.url(:content) }
+        @results["file-#{i}"] = { id: @image.id, url: @image.url(:content) }
       else
         @errors << @image.errors
       end
     end
 
-    if @results.length == 1
-      render json: @results[0]
+    if @errors.length > 0
+      render json:  { error: @errors.join(',') }
     else
-      if @errors.length > 0
-        render json:  { error: @errors.join(',') }
-      else
-        render json: @results
-      end
+      render json: @results
     end
   end
 

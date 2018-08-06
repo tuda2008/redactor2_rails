@@ -12,9 +12,9 @@ class Redactor2Rails::FilesController < ApplicationController
 
   def create
     return if params[:file].nil?
-    @results = []
+    @results = {}
     @errors = []
-    params[:file].each do |file|
+    params[:file].each_with_index do |file, i|
       @file = Redactor2Rails.file_model.new
       @file.data = file
       if @file.has_attribute?(:"#{Redactor2Rails.devise_user_key}")
@@ -23,20 +23,16 @@ class Redactor2Rails::FilesController < ApplicationController
         @file.assetable = user
       end
       if @file.save
-        @results << { url: @file.url, name: @file.filename }
+        @results["file-#{i}"] = { url: @file.url, name: @file.filename }
       else
         @errors << @file.errors
       end
     end
 
-    if @results.length == 1
-      render json: @results[0]
+    if @errors.length > 0
+      render json:  { error: @errors.join(',') }
     else
-      if @errors.length > 0
-        render json:  { error: @errors.join(',') }
-      else
-        render json: @results
-      end
+      render json: @results
     end
   end
 

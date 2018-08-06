@@ -1,6 +1,12 @@
 class Redactor2Rails::FilesController < ApplicationController
   before_action :redactor2_authenticate_user!
 
+  def index
+    @files = Redactor2Rails.file_model.where(
+        Redactor2Rails.file_model.new.respond_to?(Redactor2Rails.devise_user) ? {Redactor2Rails.devise_user_key => redactor2_current_user.id } : { })
+    render :json => @files.to_json
+  end
+
   def create
     return if params[:file].nil?
     @results = []

@@ -1,6 +1,12 @@
 class Redactor2Rails::ImagesController < ApplicationController
   before_action :redactor2_authenticate_user!
 
+  def index
+    @images = RedactorRails.image_model.where(
+        RedactorRails.image_model.new.respond_to?(Redactor2Rails.devise_user) ? { Redactor2Rails.devise_user_key => redactor2_current_user.id } : { })
+    render :json => @images.to_json
+  end
+
   def create
     return if params[:file].nil?
     @results = []

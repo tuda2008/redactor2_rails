@@ -10,7 +10,7 @@ $(function () {
     // Set global settings
     $R('.redactor', { 
         plugins: ['imagemanager'],
-        imageManagerJson: '/redactor2_rails/images.json',
+        //imageManagerJson: '/redactor2_rails/images.json',
         imageUpload: '/redactor2_rails/images?' + params,
         fileUpload: '/redactor2_rails/files?' + params,
         lang: 'zh_cn' }

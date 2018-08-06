@@ -2,8 +2,9 @@ class Redactor2Rails::ImagesController < ApplicationController
   before_action :redactor2_authenticate_user!
 
   def index
+    user = redactor2_current_user || redactor2_current_admin_user
     @images = Redactor2Rails.image_model.where(
-        Redactor2Rails.image_model.new.respond_to?(Redactor2Rails.devise_user) ? { Redactor2Rails.devise_user_key => redactor2_current_user.id } : { })
+        Redactor2Rails.image_model.new.respond_to?(Redactor2Rails.devise_user) ? { Redactor2Rails.devise_user_key => user.id } : { })
     render :json => @images.to_json
   end
 
@@ -11,12 +12,13 @@ class Redactor2Rails::ImagesController < ApplicationController
     return if params[:file].nil?
     @results = []
     @errors = []
+    user = redactor2_current_user || redactor2_current_admin_user
     params[:file].each do |file|
       @image = Redactor2Rails.image_model.new
       @image.data = file
       if @image.has_attribute?(:"#{Redactor2Rails.devise_user_key}")
-        @image.send("#{Redactor2Rails.devise_user}=", redactor2_current_user)
-        @image.assetable = redactor2_current_user
+        @image.send("#{Redactor2Rails.devise_user}=", user)
+        @image.assetable = user
       end
       if @image.save
         @results << { id: @image.id, url: @image.url(:content) }

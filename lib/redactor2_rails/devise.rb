@@ -7,5 +7,9 @@ module Redactor2Rails
     def redactor2_current_user
       current_user
     end
+
+    def redactor2_current_admin_user
+      current_admin_user
+    end
   end
 end

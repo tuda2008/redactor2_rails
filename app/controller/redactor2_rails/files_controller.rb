@@ -4,8 +4,7 @@ class Redactor2Rails::FilesController < ApplicationController
   def create
     @file = Redactor2Rails.file_model.new
 
-    file = params[:file]
-    @file.data = Redactor2Rails::Http.normalize_param(file, request)
+    @file.data = params[:file]
     if @file.has_attribute?(:"#{Redactor2Rails.devise_user_key}")
       @file.send("#{Redactor2Rails.devise_user}=", redactor2_current_user)
       @file.assetable = redactor2_current_user

@@ -2,9 +2,11 @@ class Redactor2Rails::FilesController < ApplicationController
   before_action :redactor2_authenticate_user!
 
   def index
-    user = redactor2_current_admin_user
-    @files = Redactor2Rails.file_model.where(
-        Redactor2Rails.file_model.new.respond_to?(Redactor2Rails.devise_user) ? {Redactor2Rails.devise_user_key => user.id } : { })
+    if Redactor2Rails.file_model.new.has_attribute?(:"#{Redactor2Rails.devise_user_key}")
+      @files = Redactor2Rails.file_model.where({ Redactor2Rails.devise_user_key => redactor2_current_admin_user.id })
+    else
+      @files = Redactor2Rails.file_model.all
+    end
     render :json => @files.to_json
   end
 
@@ -12,11 +14,11 @@ class Redactor2Rails::FilesController < ApplicationController
     return if params[:file].nil?
     @results = []
     @errors = []
-    user = redactor2_current_admin_user
     params[:file].each do |file|
       @file = Redactor2Rails.file_model.new
       @file.data = file
       if @file.has_attribute?(:"#{Redactor2Rails.devise_user_key}")
+        user = redactor2_current_admin_user
         @file.send("#{Redactor2Rails.devise_user}=", user)
         @file.assetable = user
       end

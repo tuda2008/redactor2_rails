@@ -1,16 +1,16 @@
-# Imperavi Redactor for Rails 3.x - 4 Asset Pipeline 
+# Imperavi Redactor for Rails 5 Asset Pipeline 
 
-redactor2_rails integrates Imperavi Redactor for Rails Asset Pipeline (Rails 4, 3.x versions are supported)
+redactor2_rails integrates Imperavi Redactor for Rails Asset Pipeline (Rails 5 versions are supported)
 
 [![Gem Version](https://badge.fury.io/rb/redactor2_rails.svg)](https://badge.fury.io/rb/redactor2_rails)
 
 In order to use this gem, you must purchase a license from Imperavi 
-(https://imperavi.com/redactor/buy), download Redactor II files from them, 
-and place redactor.js file in the following location:
+(https://imperavi.com/redactor/buy) or (https://github.com/craftcms/redactor), download Redactor II files from them, 
+and place redactor.min.js file in the following location:
 
     `app/assets/javascripts/`
     
-And redactor.css file in the following location:
+And redactor.min.css file in the following location:
 
     `app/assets/stylesheets/`
 
@@ -18,15 +18,15 @@ And redactor.css file in the following location:
 
 Add this line to your application's Gemfile:
 
-    gem 'redactor2_rails'
+    gem 'redactor2_rails', github: 'tuda2008/redactor2_rails'
 
 And then execute:
 
-    $ bundle
+    $ bundle install
 
-Or install it yourself as:
+Or 
 
-    $ gem install redactor2_rails
+    $ bundle update
 
 ### Generate models for store uploading files
 
@@ -123,13 +123,12 @@ The above example will set the image to have a maximum width of 500px.
 After including the desired plugins they can be configured in the redactor config file as normal.
 
 To add it into the editor add 'plugins' attributes to config.js file and specify which ones do you want to use:
+  $R('.redactor', { 
+        plugins: ['video', 'fullscreen', 'textdirection', 'clips'],
+        lang:'zh_cn' }
+  );
+  $('.redactor').redactor();
 
-      $('.redactor').redactor(
-        { "plugins": ['fullscreen',
-                    'textdirection',
-                    'clips']
-        });
-        
 Full details of these can be found at [Redactor Plugins](http://imperavi.com/redactor/plugins/)
 
 ### Defining a Devise User Model

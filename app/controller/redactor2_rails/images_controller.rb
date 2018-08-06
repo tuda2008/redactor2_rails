@@ -2,18 +2,21 @@ class Redactor2Rails::ImagesController < ApplicationController
   before_action :redactor2_authenticate_user!
 
   def create
-    @image = Redactor2Rails.image_model.new
-
-    @image.data = params[:file]
-    if @image.has_attribute?(:"#{Redactor2Rails.devise_user_key}")
-      @image.send("#{Redactor2Rails.devise_user}=", redactor2_current_user)
-      @image.assetable = redactor2_current_user
-    end
-
-    if @image.save
-      render json: { id: @image.id, url: @image.url(:content) }
-    else
-      render json: { error: @image.errors }
+    return if params[:file].nil?
+    @results = []
+    @errors = []
+    params[:file].each do |file|
+      @image = Redactor2Rails.image_model.new
+      @image.data = file
+      if @image.has_attribute?(:"#{Redactor2Rails.devise_user_key}")
+        @image.send("#{Redactor2Rails.devise_user}=", redactor2_current_user)
+        @image.assetable = redactor2_current_user
+      end
+      if @image.save
+        @results << { id: @image.id, url: @image.url(:content) }
+      else
+        @errors << @image.errors
+      end
     end
   end
 

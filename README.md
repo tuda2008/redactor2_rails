@@ -97,7 +97,7 @@ If You Want To setup a new language in Redactor you should do three things:
 
 In you file `app/assets/javascripts/redactor2_rails/config.js` set option
 
-    "lang":'ru'
+    "lang":'zh_cn'
 
 Place lang files in the following location:
    
